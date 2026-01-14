@@ -9,7 +9,7 @@ import { loadWorkspaceProjects, resolveProjectNames, findWorkspaceRoot } from '.
 const program = new Command();
 
 program
-  .name('exposify')
+  .name('exposify-codegen')
   .description('Generate typed clients from NestJS @Expose decorated services')
   .version('0.0.1')
   .argument('<projects...>', 'Workspace project names to scan (e.g., api auth)')
@@ -17,6 +17,7 @@ program
   .option('-e, --endpoint <path>', 'JSON-RPC endpoint path', '/rpc/v1')
   .option('-t, --target <target>', 'Target framework (angular, react, fetch)', 'angular')
   .option('-r, --root <path>', 'Workspace root directory')
+  .option('-v, --verbose', 'Show detailed output')
   .action(async (projectNames: string[], options) => {
     try {
       // Find workspace root
@@ -53,8 +54,8 @@ program
         process.exit(1);
       }
 
-      console.log('exposify - Client Generator');
-      console.log('===========================');
+      console.log('exposify-codegen');
+      console.log('================');
       console.log(`Workspace: ${root}`);
       console.log(`Projects:  ${resolved.map((p) => p.name).join(', ')}`);
       console.log(`Output:    ${output}`);
@@ -68,6 +69,7 @@ program
         output,
         endpoint: options.endpoint,
         target,
+        verbose: options.verbose,
       });
     } catch (error) {
       console.error('Error:', (error as Error).message);

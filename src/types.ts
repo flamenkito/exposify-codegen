@@ -41,6 +41,7 @@ export interface GeneratorOptions {
   output: string;
   endpoint: string;
   target: GeneratorTarget;
+  verbose?: boolean;
 }
 
 export type GeneratorTarget = 'angular' | 'react' | 'fetch';

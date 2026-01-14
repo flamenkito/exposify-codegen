@@ -1,4 +1,8 @@
-# exposify-codegen
+<div align="center">
+  <img src="docs/assets/logo_icon_transparent_1024.png" alt="exposify-codegen Logo" width="128">
+  <h1>exposify-codegen</h1>
+  <p><strong>Generate typed clients from NestJS @Expose decorated services</strong></p>
+</div>
 
 Generate typed multi-transport clients from NestJS `@Expose` decorated services.
 
@@ -112,6 +116,32 @@ generated/
 │   ├── create-user-dto.ts
 │   └── index.ts
 └── index.ts
+```
+
+## Integration with workgraph
+
+For automatic client generation during builds, use [workgraph](https://github.com/tks2a/workgraph) with source configuration.
+
+Add to your root `package.json`:
+
+```json
+{
+  "workgraph": {
+    "sources": {
+      "apps/web-angular/src/generated": "npx exposify-codegen api -o ./apps/web-angular/src/generated"
+    }
+  }
+}
+```
+
+Now when you run `workgraph build` or `workgraph watch`, the client is automatically regenerated before building projects that depend on it.
+
+```bash
+$ workgraph build -c api
+[14:32:01] Generating: apps/web-angular/src/generated
+[14:32:03]   Generated successfully
+[14:32:03] Building: @myorg/api
+...
 ```
 
 ## Programmatic API
