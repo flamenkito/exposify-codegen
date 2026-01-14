@@ -1,0 +1,47 @@
+{
+  "name": "exposify-codegen",
+  "version": "0.0.1",
+  "description": "Generate typed multi-transport clients from NestJS @Expose decorated services",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "exposify-codegen": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "nestjs",
+    "angular",
+    "react",
+    "client-generator",
+    "json-rpc",
+    "typescript",
+    "code-generation",
+    "ts-morph",
+    "ast",
+    "decorator",
+    "rpc"
+  ],
+  "author": "asutov@outlook.com",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "commander": "^12.0.0",
+    "glob": "^10.0.0",
+    "ts-morph": "^24.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.7",
+    "typescript": "^5.7.3"
+  }
+}
