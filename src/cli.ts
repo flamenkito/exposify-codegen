@@ -15,7 +15,7 @@ program
   .argument('<projects...>', 'Workspace project names to scan (e.g., api auth)')
   .option('-o, --output <path>', 'Output directory for generated code', '.')
   .option('-e, --endpoint <path>', 'JSON-RPC endpoint path', '/rpc/v1')
-  .option('-t, --target <target>', 'Target framework (angular, react, fetch)', 'angular')
+  .requiredOption('-t, --target <target>', 'Target framework (angular, preact)')
   .option('-r, --root <path>', 'Workspace root directory')
   .option('-v, --verbose', 'Show detailed output')
   .action(async (projectNames: string[], options) => {

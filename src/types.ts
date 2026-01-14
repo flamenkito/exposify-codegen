@@ -44,7 +44,7 @@ export interface GeneratorOptions {
   verbose?: boolean;
 }
 
-export type GeneratorTarget = 'angular' | 'react' | 'fetch';
+export type GeneratorTarget = 'angular' | 'preact' | 'react' | 'fetch';
 
 export interface ParseResult {
   services: ServiceMetadata[];

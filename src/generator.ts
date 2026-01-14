@@ -1,9 +1,11 @@
 import { Parser } from './parser';
 import { ClientGenerator, GeneratorOptions, GeneratorTarget } from './types';
 import { AngularGenerator } from './generators/angular';
+import { PreactGenerator } from './generators/preact';
 
-const generators: Map<GeneratorTarget, ClientGenerator> = new Map([
+const generators = new Map<GeneratorTarget, ClientGenerator>([
   ['angular', new AngularGenerator()],
+  ['preact', new PreactGenerator()],
   // Future: ['react', new ReactGenerator()],
   // Future: ['fetch', new FetchGenerator()],
 ]);

@@ -28,3 +28,5 @@ coverage/
 .claude
 
 package-lock.json
+
+exposify-codegen-*.tgz
