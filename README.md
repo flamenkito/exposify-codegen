@@ -29,19 +29,19 @@ npx exposify-codegen --help
 
 ```bash
 # Generate Angular client from workspace projects
-exposify-codegen api auth -o ./generated
+exposify-codegen api auth -t angular -o ./generated
+
+# Generate Preact client
+exposify-codegen api -t preact -o ./generated
 
 # Output to current directory (default)
-exposify-codegen api
+exposify-codegen api -t angular
 
 # Custom endpoint
-exposify-codegen api -o ./generated -e /api/rpc
-
-# Specify target framework
-exposify-codegen api auth -o ./generated -t angular
+exposify-codegen api -t angular -o ./generated -e /api/rpc
 
 # Specify workspace root explicitly
-exposify-codegen api --root /path/to/workspace -o ./generated
+exposify-codegen api -t angular --root /path/to/workspace -o ./generated
 ```
 
 ## CLI Options
@@ -51,7 +51,7 @@ exposify-codegen api --root /path/to/workspace -o ./generated
 | `<projects...>` | Workspace project names to scan (e.g., `api auth`) | (required) |
 | `-o, --output <path>` | Output directory for generated code | `.` (current dir) |
 | `-e, --endpoint <path>` | JSON-RPC endpoint path | `/rpc/v1` |
-| `-t, --target <target>` | Target framework | `angular` |
+| `-t, --target <target>` | Target framework (required) | - |
 | `-r, --root <path>` | Workspace root directory | (auto-detected) |
 
 ## Supported Targets
@@ -59,6 +59,7 @@ exposify-codegen api --root /path/to/workspace -o ./generated
 | Target | Status | Description |
 |--------|--------|-------------|
 | `angular` | Available | Angular services with HttpClient and RxJS |
+| `preact` | Available | Preact/React async functions with fetch |
 | `react` | Planned | React hooks with fetch/axios |
 | `fetch` | Planned | Framework-agnostic fetch client |
 
@@ -128,7 +129,7 @@ Add to your root `package.json`:
 {
   "workgraph": {
     "sources": {
-      "apps/web-angular/src/generated": "npx exposify-codegen api -o ./apps/web-angular/src/generated"
+      "apps/web-angular/src/generated": "npx exposify-codegen api -t angular -o ./apps/web-angular/src/generated"
     }
   }
 }
@@ -202,6 +203,10 @@ export class MyCustomGenerator extends BaseGenerator {
 
 - Node.js >= 18.0.0
 - NestJS services decorated with `@Expose({ transport: 'json-rpc' })`
+
+## Publishing
+
+See [RELEASING.md](./RELEASING.md) for publishing instructions.
 
 ## License
 
