@@ -1,7 +1,9 @@
 <div align="center">
-  <img src="docs/assets/logo_icon_transparent_1024.png" alt="exposify-codegen Logo" width="128">
-  <h1>exposify-codegen</h1>
-  <p><strong>Generate typed clients from NestJS @Expose decorated services</strong></p>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="assets/logo.png">
+    <img src="assets/logo.png" alt="Exposify Logo" width="400">
+  </picture>
 </div>
 
 Generate typed multi-transport clients from NestJS `@Expose` decorated services.
