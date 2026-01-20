@@ -11,14 +11,10 @@ const generators = new Map<GeneratorTarget, ClientGenerator>([
 ]);
 
 export class Generator {
-  private parser: Parser;
-
-  constructor() {
-    this.parser = new Parser();
-  }
-
   generate(options: GeneratorOptions): void {
-    const { inputs, target, verbose } = options;
+    const { inputs, target, verbose, workspaceProjects } = options;
+
+    const parser = new Parser(workspaceProjects);
 
     const generator = generators.get(target);
     if (!generator) {
@@ -27,7 +23,7 @@ export class Generator {
     }
 
     console.log(`Parsing source files from: ${inputs.join(', ')}`);
-    const result = this.parser.parse(inputs);
+    const result = parser.parse(inputs);
 
     console.log(`Found ${result.services.length} services, ${result.types.length} types\n`);
 

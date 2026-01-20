@@ -36,12 +36,18 @@ export interface PropertyMetadata {
   optional: boolean;
 }
 
+export interface WorkspaceProject {
+  name: string;
+  srcPath: string;
+}
+
 export interface GeneratorOptions {
   inputs: string[];
   output: string;
   endpoint: string;
   target: GeneratorTarget;
   verbose?: boolean;
+  workspaceProjects?: WorkspaceProject[];
 }
 
 export type GeneratorTarget = 'angular' | 'preact' | 'react' | 'fetch';

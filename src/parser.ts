@@ -1,4 +1,4 @@
-import { Project, ClassDeclaration, MethodDeclaration, Type, SourceFile } from 'ts-morph';
+import { Project, ClassDeclaration, MethodDeclaration, Type, SourceFile, InterfaceDeclaration, TypeAliasDeclaration, Node } from 'ts-morph';
 import * as path from 'path';
 import {
   ServiceMetadata,
@@ -7,16 +7,41 @@ import {
   DecoratorMetadata,
   TypeMetadata,
   ParseResult,
+  WorkspaceProject,
 } from './types';
+
+const buildWorkspacePaths = (
+  projects: WorkspaceProject[],
+): Record<string, string[]> => {
+  const paths: Record<string, string[]> = {};
+
+  for (const project of projects) {
+    // Map @scope/name -> src/index.ts
+    paths[project.name] = [path.join(project.srcPath, 'index.ts')];
+    // Map @scope/name/* -> src/*
+    paths[`${project.name}/*`] = [path.join(project.srcPath, '*')];
+  }
+
+  return paths;
+};
 
 export class Parser {
   private project: Project;
   private collectedTypes = new Map<string, TypeMetadata>();
 
-  constructor(tsConfigPath?: string) {
+  constructor(workspaceProjects?: WorkspaceProject[]) {
+    const workspacePaths = workspaceProjects
+      ? buildWorkspacePaths(workspaceProjects)
+      : {};
+
     this.project = new Project({
-      tsConfigFilePath: tsConfigPath,
       skipAddingFilesFromTsConfig: true,
+      compilerOptions: {
+        // Add workspace path mappings to resolve from source
+        paths: workspacePaths,
+        // Use bundler resolution for better source file handling
+        moduleResolution: 100, // ts.ModuleResolutionKind.Bundler
+      },
     });
   }
 
@@ -229,6 +254,7 @@ export class Parser {
       sourceCode = this.classToInterface(decl.getText(), typeName);
     }
 
+    // Add to collected types BEFORE recursing to prevent infinite loops
     this.collectedTypes.set(typeName, {
       name: typeName,
       kind,
@@ -236,6 +262,26 @@ export class Parser {
       sourceFile: sourceFile.getFilePath(),
       sourceCode,
     });
+
+    // Recursively collect property types for interfaces and classes
+    this.collectPropertyTypes(decl, kindName);
+  }
+
+  private collectPropertyTypes(decl: Node, kindName: string): void {
+    if (kindName === 'InterfaceDeclaration') {
+      const interfaceDecl = decl as InterfaceDeclaration;
+      for (const prop of interfaceDecl.getProperties()) {
+        this.collectType(prop.getType());
+      }
+    } else if (kindName === 'ClassDeclaration') {
+      const classDecl = decl as ClassDeclaration;
+      for (const prop of classDecl.getProperties()) {
+        this.collectType(prop.getType());
+      }
+    } else if (kindName === 'TypeAliasDeclaration') {
+      const typeAlias = decl as TypeAliasDeclaration;
+      this.collectType(typeAlias.getType());
+    }
   }
 
   private classToInterface(classCode: string, name: string): string {

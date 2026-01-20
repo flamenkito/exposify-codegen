@@ -15,7 +15,7 @@ Generate typed multi-transport clients from NestJS `@Expose` decorated services.
 - **Multiple Targets** - Generate clients for Angular, React, and more (coming soon)
 - **Type Safety** - Preserves TypeScript types, interfaces, and DTOs
 - **JSON-RPC Transport** - Built-in support for JSON-RPC 2.0 protocol
-- **Automatic Model Generation** - Extracts and generates all referenced types
+- **Automatic Model Generation** - Recursively extracts all referenced types from properties and nested structures
 
 ## Installation
 
@@ -158,23 +158,28 @@ import {
   findWorkspaceRoot,
 } from 'exposify-codegen';
 
-// Using workspace helpers
+// Load workspace
 const root = findWorkspaceRoot(process.cwd());
 const projects = await loadWorkspaceProjects(root);
 const resolved = resolveProjectNames(['api', 'auth'], projects);
 const inputs = resolved.map(p => p.srcPath);
+const workspaceProjects = Array.from(projects.values()).map(p => ({
+  name: p.name,
+  srcPath: p.srcPath,
+}));
 
-// Using the high-level Generator
+// Using the Generator
 const generator = new Generator();
 generator.generate({
   inputs,
   output: './generated',
   endpoint: '/rpc/v1',
   target: 'angular',
+  workspaceProjects, // enables cross-package type resolution
 });
 
 // Using the Parser directly
-const parser = new Parser();
+const parser = new Parser(workspaceProjects);
 const result = parser.parse(inputs);
 console.log(result.services); // ServiceMetadata[]
 console.log(result.types);    // TypeMetadata[]

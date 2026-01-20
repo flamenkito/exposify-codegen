@@ -63,6 +63,12 @@ program
       console.log(`Target:    ${target}`);
       console.log('');
 
+      // Convert workspace projects to simplified format for parser
+      const workspaceProjects = Array.from(projects.values()).map((p) => ({
+        name: p.name,
+        srcPath: p.srcPath,
+      }));
+
       const generator = new Generator();
       generator.generate({
         inputs,
@@ -70,6 +76,7 @@ program
         endpoint: options.endpoint,
         target,
         verbose: options.verbose,
+        workspaceProjects,
       });
     } catch (error) {
       console.error('Error:', (error as Error).message);
