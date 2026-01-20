@@ -77,7 +77,7 @@ import { Expose } from 'nestjs-exposify';
 
 @Expose({ transport: 'json-rpc' })
 @Injectable()
-export class UsersService {
+export class UsersApi {
   async getUsers(): Promise<UserDto[]> {
     // ...
   }
@@ -92,15 +92,15 @@ export class UsersService {
 
 ```typescript
 @Injectable({ providedIn: 'root' })
-export class UsersService {
+export class UsersApi {
   constructor(private rpc: JsonRpcClient) {}
 
   getUsers(): Observable<UserDto[]> {
-    return this.rpc.call<UserDto[]>('UsersService.getUsers');
+    return this.rpc.call<UserDto[]>('UsersApi.getUsers');
   }
 
   createUser(dto: CreateUserDto): Observable<UserDto> {
-    return this.rpc.call<UserDto>('UsersService.createUser', dto);
+    return this.rpc.call<UserDto>('UsersApi.createUser', dto);
   }
 }
 ```
