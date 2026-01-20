@@ -1,6 +1,6 @@
 {
   "name": "exposify-codegen",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Generate typed multi-transport clients from NestJS @Expose decorated services",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
